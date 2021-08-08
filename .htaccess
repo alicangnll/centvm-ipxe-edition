@@ -1,4 +1,0 @@
-RewriteRule ".well-known/acme-challenge" - [L]
-RewriteEngine On
-RewriteRule ^boot.ipxe ./boot.php [L,NC]
-
