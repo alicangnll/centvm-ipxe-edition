@@ -37,7 +37,7 @@ goto ${selected}
 $stmt = $db->prepare('SELECT * FROM ipxe_list ORDER BY id');
 $stmt->execute();
 while($row = $stmt->fetch()) {
-	
+
 if(strip_tags($row["boot_type"]) == "oth") {
 echo '
 
@@ -45,40 +45,91 @@ echo '
 
 if(empty(strtolower(strip_tags($row["kernel"])))) {
 } else {
+if(strstr($row["kernel"], "http")) { 
+echo '
+kernel '.strtolower(strip_tags($row["kernel"])).'';
+} else {
 echo '
 kernel http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strtolower(strip_tags($row["kernel"])).'';
 }
+
+}
 if(empty(strtolower(strip_tags($row["other"])))) {
+
+if(strstr($row["file_location"], "http")) { 
+echo '
+initrd '.strip_tags($row["file_location"]).'
+boot || goto failed
+';
+} else {
 echo '
 initrd http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strip_tags($row["file_location"]).'
 boot || goto failed
 ';
-
+}
 } else {
 
+if(strstr($row["file_location"], "http")) { 
+echo '
+initrd '.strip_tags($row["file_location"]).'
+'.strip_tags($row["other"]).'
+boot || goto failed
+';
+} else {
 echo '
 initrd http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strip_tags($row["file_location"]).'
 '.strip_tags($row["other"]).'
 boot || goto failed
 ';
+}
 
 }
 
 } elseif(strip_tags($row["boot_type"]) == "vhd") { 
 if(empty(strtolower(strip_tags($row["other"])))) {
 echo '
-:'.strtolower(strip_tags($row["name"])).'
-kernel http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strtolower(strip_tags($row["kernel"])).'
-initrd http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strip_tags($row["file_location"]).'
+:'.strtolower(strip_tags($row["name"])).'';
+
+if(strstr($row["kernel"], "http")) { 
+echo '
+kernel '.strtolower(strip_tags($row["kernel"])).'';
+} else {
+echo '
+kernel http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strtolower(strip_tags($row["kernel"])).'';
+}
+if(strstr($row["file_location"], "http")) { 
+echo '
+initrd '.strip_tags($row["file_location"]).'
 boot || goto failed';
 } else {
 echo '
-:'.strtolower(strip_tags($row["name"])).'
-kernel http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strtolower(strip_tags($row["kernel"])).'
 initrd http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strip_tags($row["file_location"]).'
-'.strip_tags($row["other"]).'
+boot || goto failed';
+}
+
+} else {
+echo '
+:'.strtolower(strip_tags($row["name"])).'';
+
+if(strstr($row["kernel"], "http")) { 
+echo '
+kernel '.strtolower(strip_tags($row["kernel"])).'';
+} else {
+echo '
+kernel http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strtolower(strip_tags($row["kernel"])).'';
+}
+
+if(strstr($row["file_location"], "http")) { 
+echo '
+initrd '.strip_tags($row["file_location"]).'
 boot || goto failed
 ';
+} else {
+echo '
+initrd http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strip_tags($row["file_location"]).'
+boot || goto failed
+';
+}
 }
 
 } else {
