@@ -1,0 +1,7 @@
+default vesamenu.c32
+	prompt 0
+	timeout 100
+
+	# Local Hard Disk pxelinux.cfg default entry
+	menu title PXE Boot Menu By Ali Can
+	INCLUDE /var/www/html/backup/controls.conf
