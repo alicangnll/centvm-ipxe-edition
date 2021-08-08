@@ -111,6 +111,7 @@ echo '<nav class="menu">
 					<a class="data" href="index.php?git=networkinfo">DHCP</a>
 					<a class="data" href="#">TFTP</a>
 					<a class="data" href="index.php?git=pxeinfo">PXE</a>
+					<a class="data" href="index.php?git=shell">Online CommandLine</a>
 				</li>
 			</ul>
 		</nav>';

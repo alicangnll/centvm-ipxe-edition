@@ -613,6 +613,39 @@ window.location.replace("index.php");
 </script>';
 break;
 
+case 'shell':
+$getir->logincheck($_COOKIE['admin_adi']);
+echo '<div class="container">';
+$getir->NavBar();
+echo '<main class="main">
+<h1>Web Command</h1>
+<br><br><br><br><br><br><br><br>';
+$getir->HeadMenu("PXE Panel");
+if (!empty($_POST['al'])) {
+    $cmd = shell_exec($_POST['al']);
+	$data = htmlspecialchars($cmd, ENT_QUOTES, 'UTF-8');
+}
+
+echo '<div class="login-box">
+        <form method="post">
+            <label for="al"><strong>Command</strong></label>
+            <div class="user-box">
+                <input type="text" name="al" id="al" value="'.strip_tags($_POST["al"]).'" onfocus="this.setSelectionRange(this.value.length, this.value.length);" autofocus required><br>
+                <button type="submit">Execute</button>
+            </div>
+        </form>';
+if ($_SERVER['REQUEST_METHOD'] === 'POST'){ 
+echo '<h2>Output</h2>';
+if (isset($cmd)) {
+echo '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<pre style="width:100%;height:30%;">'.$data.'</pre><br>';
+} else {
+echo '<pre><small>No result.</small></pre>';
+}
+}
+echo '</div></main></div>';
+break;
+
 default:
 $getir->Error('Sayfa Bulunamadı');
 break;

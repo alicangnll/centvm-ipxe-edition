@@ -19,7 +19,7 @@ item --gap --             ------------------------- Operating systems ----------
 $stmt = $db->prepare('SELECT * FROM ipxe_list ORDER BY id');
 $stmt->execute();
 while($row = $stmt->fetch()) {
-echo 'item --key p '.strtolower(strip_tags($row["name"])).'     '.strtoupper(strip_tags($row["name"])).' installation
+echo 'item --key p '.strtolower(strip_tags(str_replace(" ", "", $row["name"]))).'     '.strtoupper(strip_tags($row["name"])).' installation
 ';
 }
 
@@ -40,8 +40,7 @@ while($row = $stmt->fetch()) {
 
 if(strip_tags($row["boot_type"]) == "oth") {
 echo '
-
-:'.strtolower(strip_tags($row["name"])).'';
+:'.strtolower(strip_tags(str_replace(" ", "", $row["name"]))).'';
 
 if(empty(strtolower(strip_tags($row["kernel"])))) {
 } else {
@@ -85,10 +84,10 @@ boot || goto failed
 
 }
 
-} elseif(strip_tags($row["boot_type"]) == "vhd") { 
+} elseif(strip_tags($row["boot_type"]) == "vhdx") { 
 if(empty(strtolower(strip_tags($row["other"])))) {
 echo '
-:'.strtolower(strip_tags($row["name"])).'';
+:'.strtolower(strip_tags(str_replace(" ", "", $row["name"]))).'';
 
 if(strstr($row["kernel"], "http")) { 
 echo '
@@ -109,7 +108,7 @@ boot || goto failed';
 
 } else {
 echo '
-:'.strtolower(strip_tags($row["name"])).'';
+:'.strtolower(strip_tags(str_replace(" ", "", $row["name"]))).'';
 
 if(strstr($row["kernel"], "http")) { 
 echo '
