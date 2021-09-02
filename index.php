@@ -263,6 +263,8 @@ if(strstr($ext, 'c32')) {
 } elseif(strstr($ext, 'ipxe')) {
 } elseif(strstr($ext, 'kpxe')) {
 } elseif(strstr($ext, 'cfg')) {
+} elseif(strstr($_DIRFILE, 'memdisk')) {
+} elseif(strstr($_DIRFILE, 'wimboot')) {
 } elseif(strstr($_DIRFILE, '.0')) {
 } else {
 echo '<tr>
@@ -450,7 +452,7 @@ touch("backup/dnsmasq.conf");
 	dhcp-boot=tag:!ipxe,undionly.kpxe
 	dhcp-boot=http://'.strip_tags($_POST["serverip"]).'/boot.php
 
-	pxe-service=tag:!ipxe,x86PC,"splash",undionly.kpxe
+	pxe-service=tag:!ipxe,x86PC,"AliNetBoot",undionly.kpxe
 
 	#TFTP settings
 	enable-tftp

@@ -423,9 +423,9 @@
 	dhcp-boot=tag:!ipxe,undionly.kpxe
 	dhcp-match=set:ipxe,175 # gPXE/iPXE sends a 175 option.
 	dhcp-boot=tag:!ipxe,undionly.kpxe
-	dhcp-boot=http://'.strip_tags($_POST["serverip"]).'/backup/boot.ipxe
+	dhcp-boot=http://'.strip_tags($_POST["serverip"]).'/boot.php
 
-	pxe-service=tag:!ipxe,x86PC,"splash",undionly.kpxe
+	pxe-service=tag:!ipxe,x86PC,"AliNetBoot",undionly.kpxe
 
 	#TFTP settings
 	enable-tftp
