@@ -295,19 +295,12 @@
 	
 	  $systemctl_stopfirewall = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k systemctl stop firewalld";
 	  $systemctl_disfirewall = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k systemctl disable firewalld";
-	  shell_exec($systemctl_stopfirewall);
-	  shell_exec($systemctl_disfirewall);
 	  
 	  $installer = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k yum install -y epel-release ipxe-bootimgs tcpdump tftp tftp-server xinetd syslinux net-tools dnsmasq zip nfs-utils tar wget policycoreutils-python-utils";
 	  $mk_syslinuxfolder = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k mkdir /var/lib/tftpboot/pxelinux.cfg";
       $copy_syslinux = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k cp -v /usr/share/syslinux/* /var/lib/tftpboot";
 	  $wget1 = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k cp /usr/share/ipxe/undionly.kpxe /var/lib/tftpboot/";
 	  $wget2 = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k wget -P /var/lib/tftpboot https://raw.githubusercontent.com/ipxe/wimboot/master/wimboot  && wget -P /var/lib/tftpboot http://boot.ipxe.org/ipxe.efi";
-  	  shell_exec($installer);
-	  shell_exec($mk_syslinuxfolder);
-	  shell_exec($copy_syslinux);
-	  shell_exec($wget1);
-	  shell_exec($wget2);
 	  
 	  $cp_default = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k cp ".dirname(__FILE__)."/backup/default /var/lib/tftpboot/pxelinux.cfg/";
 	  shell_exec($cp_default);
@@ -320,15 +313,6 @@
 	  $chcforce = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k chcon -R -t httpd_sys_rw_content_t /var/lib/tftpboot";
 	  $semanage = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k semanage fcontext -a -t httpd_sys_rw_content_t /var/lib/tftpboot";
 	  $restoreconforce = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k /sbin/restorecon -R -v /var/lib/tftpboot";
-	  
-	  shell_exec($stop_firewall);
-	  shell_exec($disable_firewall);
-	  shell_exec($enforce);
-	  shell_exec($chforce);
-	  shell_exec($choforce);
-	  shell_exec($chcforce);
-	  shell_exec($semanage);
-	  shell_exec($restoreconforce);
 	  
 	  echo '<body class="container">
 	  <br><br><br>
@@ -451,11 +435,12 @@
 	$system_dnsmasq2 = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k systemctl enable dnsmasq";
 	$system_xinet = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k systemctl start xinetd";
 	$system_xinet2 = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k systemctl enable xinetd";
+	$system_httpd = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k systemctl restart httpd";
 	shell_exec($system_dnsmasq);
 	shell_exec($system_dnsmasq2);
 	shell_exec($system_xinet);
 	shell_exec($system_xinet2);
-	
+	shell_exec($system_httpd);
 	  echo '<body class="container">
 	  <br><br><br>
 	  <div class="mx-auto card">
@@ -473,7 +458,8 @@
 	  '.strip_tags($system_dnsmasq).'<br>
 	  '.strip_tags($system_dnsmasq2).'<br>
 	  '.strip_tags($system_xinet).'<br>
-	  '.strip_tags($system_xinet2).'<br><br>
+	  '.strip_tags($system_xinet2).'<br>
+	  '.strip_tags($system_httpd).'<br><br>
 	  '.$select.'<br>
 	  </code><br>
 	  <div class="form-group">
