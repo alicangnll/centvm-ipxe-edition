@@ -530,7 +530,7 @@
 	<hr></hr>
 	<p>Yükleme Tamamlandı. Artık Server hazır durumdadır.</p>
 	  <code>Default User : alicangonullu<br>
-	  Default Password : 1234 <br>
+	  Default Password : 19742008 <br>
 	  HDD Image Create Code : qemu-img create -f raw /var/lib/tftpboot/disk1.img 10G <br>
 	  HDD Image Info Code : qemu-img info /var/lib/tftpboot/disk1.img <br>
 	  HDD Image Resize Code : qemu-img resize -f raw /var/lib/tftpboot/disk1.img 20G</br>
