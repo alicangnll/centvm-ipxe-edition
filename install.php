@@ -68,11 +68,16 @@
 	  </div>
 	  </div></body>
 	  <script>
-	  document.cookie = "rootpwd= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-	  document.cookie = "netwdrv= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-	  document.cookie = "lang= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-	  document.cookie = "user_id= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-	  document.cookie = "admin_adi= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+	  function deleteAllCookies() {
+		var cookies = document.cookie.split(";");
+		for (var i = 0; i < cookies.length; i++) {
+	  var cookie = cookies[i];
+	  var eqPos = cookie.indexOf("=");
+	  var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+	  document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+	  }
+	  }
+	  deleteAllCookies();
 	  </script>';
 	  break;
 
@@ -414,28 +419,18 @@
 	  </div></div></div></body>';
 	  break;
 
-	  case 'install3':
-	  if(file_exists("yukle.lock")) {
-	  unlink("yukle.lock");
+	  case 'install3':	  
 	  $txt = md5(rand(5,15));
-	  $fp = fopen("yukle.lock","a");
-	  fwrite($fp,$txt);
-	  fclose($fp);
+	  $getir->ControlFile("yukle.lock", $txt);
+	  
+	  if(file_exists("backup/centvm.service")) {
+	  unlink("backup/centvm.service");
 	  } else {
-	  $txt = md5(rand(5,15));
-	  $fp = fopen("yukle.lock","a");
-	  fwrite($fp,$txt);
-	  fclose($fp);
 	  }
-
-	if(file_exists("backup/centvm.service")) {
-	unlink("backup/centvm.service");
-	} else {
-	}
-	if(file_exists("backup/custom_start.sh")) {
-	unlink("backup/custom_start.sh");
-	} else {
-	}
+	  if(file_exists("backup/custom_start.sh")) {
+	  unlink("backup/custom_start.sh");
+	  } else {
+	  }
 	$select = "systemctl stop firewalld
 	systemctl disable firewalld
 	setenforce 0 && sed -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/sysconfig/selinux
@@ -444,10 +439,7 @@
 	chcon -R -t httpd_sys_rw_content_t /var/lib/tftpboot
 	semanage fcontext -a -t httpd_sys_rw_content_t /var/lib/tftpboot
 	/sbin/restorecon -R -v /var/lib/tftpboot";
-
-	$file3 = fopen("backup/custom_start.sh", "a");
-	fwrite($file3, strip_tags($select));
-	fclose($file3);
+	$getir->ControlFile("backup/custom_start.sh", $select);
 
 	$cp_start = "cp ".dirname(__FILE__)."/backup/centvm.service /etc/systemd/system/";
 	$sysctl_start = "systemctl start centvm.service";
