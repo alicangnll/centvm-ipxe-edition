@@ -39,7 +39,6 @@
 	  </a></div></div></div>');
 	  } else {      
 	  }
-	  
 	  if(!isset($_GET['git'])) {
 	  $sayfa = 'index';
 	  } elseif(empty($_GET['git'])) {
