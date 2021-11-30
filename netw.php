@@ -6,7 +6,7 @@ if (file_exists("yukle.lock")) {
 die("Yükleme yapılmamış (Eksik dosya : yukle.lock)<br><a href='install.php'>Yükle</a>");
 }
 $getir = new PXEBoot();
-$getir->logincheck($_COOKIE['admin_adi']);
+$getir->logincheck($_SESSION['admin_adi']);
 $durum = strip_tags($_GET["id"]);
 $int = strip_tags($_GET["crd"]);
 

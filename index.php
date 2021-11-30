@@ -214,9 +214,6 @@ session_start();
 $_SESSION["user_id"] = md5($getir_mail);
 $_SESSION["admin_adi"] = $getir_mail;
 
-setcookie("user_id", md5($getir_mail), time()+3600);
-setcookie("admin_adi", md5($getir_mail), time()+3600);
-
 $stmt = $db->prepare('SELECT * FROM admin_list WHERE admin_usrname = :admin');
 $stmt->execute(array(':admin' => $name));
 if($rowq = $stmt->fetch()) {
@@ -237,7 +234,7 @@ $getir->Error("Empty Character");
 break;
 
 case 'pxeboot':
-$getir->logincheck($_COOKIE['admin_adi']);
+$getir->logincheck($_SESSION['admin_adi']);
 $getir->HeadMenu("PXE Panel");
 echo '<div class="container">';
 $getir->NavBar();
@@ -322,7 +319,7 @@ echo '</main></div>';
 break;
 
 case 'pxegen':
-$getir->logincheck($_COOKIE['admin_adi']);
+$getir->logincheck($_SESSION['admin_adi']);
 echo '<div class="container">';
 $getir->NavBar();
 echo '<main class="main">
@@ -356,7 +353,7 @@ echo '<button type="submit" href="#">Generate</button>
 break;
 
 case 'ppxegen':
-$getir->logincheck($_COOKIE['admin_adi']);
+$getir->logincheck($_SESSION['admin_adi']);
 echo '<div class="container">';
 $getir->NavBar();
 echo '<main class="main">
@@ -386,7 +383,7 @@ echo '</div></main></div>';
 break;
 
 case 'dhcpoption':
-$getir->logincheck($_COOKIE['admin_adi']);
+$getir->logincheck($_SESSION['admin_adi']);
 echo '<div class="container">';
 $getir->NavBar();
 echo '<main class="main">
@@ -428,7 +425,7 @@ echo '</main></div>';
 break;
 
 case 'pdhcpoption':
-$getir->logincheck($_COOKIE['admin_adi']);
+$getir->logincheck($_SESSION['admin_adi']);
 if (file_exists("backup/dnsmasq.conf")) {
 unlink("backup/dnsmasq.conf");
 touch("backup/dnsmasq.conf");
@@ -482,7 +479,7 @@ echo '</main></div>';
 break;
 
 case 'pxeinfo':
-$getir->logincheck($_COOKIE['admin_adi']);
+$getir->logincheck($_SESSION['admin_adi']);
 $getir->HeadMenu("PXE Panel");
 echo '<div class="container">';
 $getir->NavBar();
@@ -496,7 +493,7 @@ echo '</main></div>';
 break;
 
 case 'networkinfo':
-$getir->logincheck($_COOKIE['admin_adi']);
+$getir->logincheck($_SESSION['admin_adi']);
 $getir->HeadMenu("PXE Panel");
 echo '<div class="container">';
 $getir->NavBar();
@@ -515,7 +512,7 @@ break;
 
 
 case 'phpinfo':
-$getir->logincheck($_COOKIE['admin_adi']);
+$getir->logincheck($_SESSION['admin_adi']);
 $getir->HeadMenu("PXE Panel");
 echo '<div class="container">';
 $getir->NavBar();
@@ -534,7 +531,7 @@ echo '
 break;
 
 case 'repair':
-$getir->logincheck($_COOKIE['admin_adi']);
+$getir->logincheck($_SESSION['admin_adi']);
 $sys = "
 //Commands for repair
 systemctl stop firewalld
@@ -562,7 +559,7 @@ echo '
 break;
 
 case 'addimage':
-$getir->logincheck($_COOKIE['admin_adi']);
+$getir->logincheck($_SESSION['admin_adi']);
 $getir->HeadMenu("PXE Panel");
 echo '<div class="container">
 ';
@@ -591,7 +588,7 @@ echo '
 break;
 
 case 'addwget':
-$getir->logincheck($_COOKIE['admin_adi']);
+$getir->logincheck($_SESSION['admin_adi']);
 echo '<div class="container">';
 $getir->NavBar();
 echo '<main class="main">
@@ -603,7 +600,7 @@ echo '</main></div>';
 break;
 
 case 'pxecikis':
-$getir->logincheck($_COOKIE['admin_adi']);
+$getir->logincheck($_SESSION['admin_adi']);
 session_destroy();
 echo '<script>
 document.cookie = "lang= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
@@ -616,7 +613,7 @@ window.location.replace("index.php");
 break;
 
 case 'shell':
-$getir->logincheck($_COOKIE['admin_adi']);
+$getir->logincheck($_SESSION['admin_adi']);
 echo '<div class="container">';
 $getir->NavBar();
 echo '<main class="main">
