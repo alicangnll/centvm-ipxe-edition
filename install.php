@@ -125,6 +125,7 @@
 	  $getir->ControlCookie("rootpwd");
 	  $getir->ControlCookie("netwdrv");
 	  $getir->ControlCookie("lang");
+	  
 	  $data = '{"version_name": "Cygen","version": "11","lang" : "'.strip_tags($_POST["lang"]).'", "netw": "'.strip_tags($_POST["netwdrv"]).'"}';
 	  $getir->ControlFile("update.json", $data);
 	  echo '<body class="container">
@@ -191,27 +192,23 @@
 	  }
 	  $conn->close();
 	  
+	  
 	  $sql = mysqli_connect($mysqlserv, $mysqlusr, $mysqlpass, "pxe_boot");
 	  $sqlSource = file_get_contents(''.dirname(__FILE__).'/ipxe.sql');
 	  mysqli_multi_query($sql,$sqlSource);
-
-	  $hostname = shell_exec("hostnamectl | grep -v hostname | grep -v Icon | grep -v Kernel | grep -v Chassis | grep -v Machine | grep -v Boot | grep -v Virtualization | grep -v CPE | grep -v Architecture");
-	  $str1 = str_replace("Operating", "", $hostname);
-	  $str2 = str_replace(":", "", $str1);
-	  $str3 = str_replace("System", "", $str2);
 	  echo '<body class="container">
 	  <br><br><br>
 	  <div class="mx-auto card">
 	  <div class="card-body">
 	  <b>MySQL Installation</b>
 	  <hr></hr>
-	  <code>System Type : '.trim($str3).'</code><br>
+	  <code>MySQL Installation Successful</code><br>
 	  <a href="install.php?git=install" class="btn btn-dark">Next</a>
 	  </div></div></body>';
 	  break;
 
 
-	 case 'install':
+	  case 'install':
 	  if (file_exists("backup/tftp")) {
 	  unlink("backup/tftp");
 	  touch("backup/tftp");
@@ -224,10 +221,9 @@
 	  } else {
 	  touch("backup/pxeboot.conf");
 	  }
-	if(strip_tags($_COOKIE["systype"]) == "centos") {
 
 	
-		$httpdcfg = "
+	  $httpdcfg = "
 	<IfModule mod_dav_fs.c>
 	DAVLockDB /var/lib/dav/lockdb
 	</IfModule>
@@ -331,32 +327,17 @@
 
   <button type="submit" class="btn btn-dark">İleri / Next</button>
   </form>
-	  </div></div></div></body>';
-	  } else {
-		die('<body class="container">
-	  <br><br><br>
-	  <div class="mx-auto card">
-	  <div class="card-body">
-	  <b>First Installation</b>
-	  <hr></hr>
-	  <code>
-	  System are not supporting please install CentOS and try again
-	  </code><br>
-	  <div class="form-group">
-	  <br><br><a href="install.php" " class="btn btn-dark">Next</button><br>
-	  </div></div></div></body>');
-	  }
-	  break;
+  </div></div></div></body>';
+	break;
 
 
-	  case 'install2':
-	if(strip_tags($_COOKIE["systype"]) == "centos") {
+	case 'install2':
 	if (file_exists("backup/dnsmasq.conf")) {
-	  unlink("backup/dnsmasq.conf");
-	  touch("backup/dnsmasq.conf");
-	  } else {
-	  touch("backup/dnsmasq.conf");
-	  }
+	unlink("backup/dnsmasq.conf");
+	touch("backup/dnsmasq.conf");
+	} else {
+	touch("backup/dnsmasq.conf");
+	}
 	
 	$select = '#VBox Config
 	# DHCP on Virtualbox https://jpmens.net/2018/03/07/dhcp-in-virtualbox-hosts/
@@ -431,8 +412,6 @@
 	  <div class="form-group">
 	  <br><br><a href="install.php?git=install3" " class="btn btn-dark">Next</button><br>
 	  </div></div></div></body>';
-	  } else {
-	  }
 	  break;
 
 	  case 'install3':

@@ -1,8 +1,6 @@
 <?php
 include("conn.php");
 
-
-
 $getir = new PXEBoot();
 $getir->ControlSession("yukle.lock");
 $getir->funcControl('shell_exec');
