@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Anamakine: localhost
--- Üretim Zamanı: 08 Ağu 2021, 00:46:23
+-- Üretim Zamanı: 30 Kas 2021, 18:15:23
 -- Sunucu sürümü: 10.3.28-MariaDB
 -- PHP Sürümü: 7.2.24
 
@@ -64,8 +64,7 @@ CREATE TABLE `ipxe_list` (
 --
 
 INSERT INTO `ipxe_list` (`id`, `name`, `file_location`, `other`, `kernel`, `boot_type`) VALUES
-(1, 'FreeDOS', 'FD12FLOPPY.zip', '', 'memdisk', 'oth'),
-(2, 'FreeDOS2', 'fdboot.img', 'ramdisk_size=30000', 'memdisk raw', 'oth');
+(1, 'AllInOne', 'allinone.img', '', '', 'oth');
 
 --
 -- Dökümü yapılmış tablolar için indeksler
@@ -97,7 +96,7 @@ ALTER TABLE `admin_list`
 -- Tablo için AUTO_INCREMENT değeri `ipxe_list`
 --
 ALTER TABLE `ipxe_list`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
