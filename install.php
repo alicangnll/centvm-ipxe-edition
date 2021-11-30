@@ -261,8 +261,8 @@
 	  $installer = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k yum install -y epel-release ipxe-bootimgs tcpdump tftp tftp-server xinetd syslinux net-tools dnsmasq zip nfs-utils tar wget policycoreutils-python-utils";
 	  $mk_syslinuxfolder = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k mkdir /var/lib/tftpboot/pxelinux.cfg";
       $copy_syslinux = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k cp -v /usr/share/syslinux/* /var/lib/tftpboot";
-	  $wget1 = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k cp /usr/share/ipxe/undionly.kpxe /var/lib/tftpboot/";
-	  $wget2 = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k cp ".dirname(__FILE__)."/extra/wimboot /var/lib/tftpboot && cp ".dirname(__FILE__)."/extra/ipxe.efi /var/lib/tftpboot";
+	  $wget1 = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k cp -v ".dirname(__FILE__)."/extra/undionly.kpxe /var/lib/tftpboot/";
+	  $wget2 = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k cp -v ".dirname(__FILE__)."/extra/wimboot /var/lib/tftpboot/ && cp ".dirname(__FILE__)."/extra/ipxe.efi /var/lib/tftpboot/";
 	  
 	  $cp_default = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k cp ".dirname(__FILE__)."/backup/default /var/lib/tftpboot/pxelinux.cfg/";
 	  shell_exec($cp_default);
