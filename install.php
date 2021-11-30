@@ -98,8 +98,7 @@
 	  <form action="install.php?git=license" method="post">
 	  <div class="form-group">
 	  <select id="lang" name="lang" class="form-control form-select" aria-label="Language">
-	  <option selected>Language / Dil</option>
-	  <option value="TR">Türkçe</option>
+	  <option selected>Language</option>
 	  <option value="EN">English</option>
 	  </select><br>
 	  <select id="systype" name="systype" class="form-control form-select" aria-label="Boot Type">
@@ -193,39 +192,7 @@
 	  $conn->close();
 	  
 	  $sql = mysqli_connect($mysqlserv, $mysqlusr, $mysqlpass, "pxe_boot");
-	  $sqlSource = "CREATE TABLE `admin_list` (
-	  `admin_id` int(11) NOT NULL,
-	  `admin_email` varchar(255) COLLATE utf8_turkish_ci NOT NULL,
-	  `admin_usrname` varchar(255) COLLATE utf8_turkish_ci NOT NULL,
-	  `admin_passwd` varchar(255) COLLATE utf8_turkish_ci NOT NULL,
-	  `admin_token` varchar(255) COLLATE utf8_turkish_ci NOT NULL,
-	  `admin_yetki` varchar(255) COLLATE utf8_turkish_ci NOT NULL
-	  ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_turkish_ci;
-
-	  INSERT INTO `admin_list` (`admin_id`, `admin_email`, `admin_usrname`, `admin_passwd`, `admin_token`, `admin_yetki`) VALUES
-	  (1, 'xxx@xxx.com', 'alicangonullu', '060323f33140b4a86b53d01d726a45c7584a3a2b', '060323f33140b4a86b53d01d726a45c7584a3a2b', '1');
-	  
-	  CREATE TABLE `ipxe_list` (
-	  `id` int(11) NOT NULL,
-	  `name` varchar(255) NOT NULL,
-	  `file_location` varchar(255) NOT NULL,
-	  `other` text NOT NULL,
-	  `kernel` varchar(255) NOT NULL,
-	  `boot_type` varchar(255) NOT NULL
-	  ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-	  ALTER TABLE `admin_list`
-	  ADD PRIMARY KEY (`admin_id`);
-
-	  ALTER TABLE `ipxe_list`
-	  ADD PRIMARY KEY (`id`);
-
-	  ALTER TABLE `admin_list`
-	  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-	  
-	  ALTER TABLE `ipxe_list`
-	  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-	  COMMIT;";
+	  $sqlSource = file_get_contents(''.dirname(__FILE__).'/ipxe.sql');
 	  mysqli_multi_query($sql,$sqlSource);
 
 	  $hostname = shell_exec("hostnamectl | grep -v hostname | grep -v Icon | grep -v Kernel | grep -v Chassis | grep -v Machine | grep -v Boot | grep -v Virtualization | grep -v CPE | grep -v Architecture");
