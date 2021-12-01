@@ -108,6 +108,7 @@
 	  </select><br>
 	  <select id="systype" name="systype" class="form-control form-select" aria-label="Boot Type">
 	  <option selected>System Type</option>
+	  <option value="debian">Debian</option>
 	  <option value="centos">CentOS</option>
 	  </select><br>
 	  <input type="password" class="form-control mt-5" name="rootpwd" id="rootpwd" placeholder="Root Password"><br>
@@ -130,7 +131,6 @@
 	  $getir->ControlCookie("rootpwd");
 	  $getir->ControlCookie("netwdrv");
 	  $getir->ControlCookie("lang");
-	  
 	  $data = '{"version_name": "Cygen","version": "11","lang" : "'.strip_tags($_POST["lang"]).'", "netw": "'.strip_tags($_POST["netwdrv"]).'"}';
 	  $getir->ControlFile("update.json", $data);
 	  echo '<body class="container">
@@ -260,6 +260,7 @@
 	}";
 	$getir->ControlFile("backup/tftp", $tftpconf);
 	
+	  if(strip_tags($_COOKIE["systype"]) == "centos") {
 	  $systemctl_stopfirewall = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k systemctl stop firewalld";
 	  $systemctl_disfirewall = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k systemctl disable firewalld";
 	  
@@ -268,10 +269,7 @@
       $copy_syslinux = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k cp -v /usr/share/syslinux/* /var/lib/tftpboot";
 	  $wget1 = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k cp -v ".dirname(__FILE__)."/extra/undionly.kpxe /var/lib/tftpboot/";
 	  $wget2 = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k cp -v ".dirname(__FILE__)."/extra/wimboot /var/lib/tftpboot/ && cp ".dirname(__FILE__)."/extra/ipxe.efi /var/lib/tftpboot/";
-	  
-	  $cp_default = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k cp ".dirname(__FILE__)."/backup/default /var/lib/tftpboot/pxelinux.cfg/";
-	  shell_exec($cp_default);
-	  
+
 	  $stop_firewall = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k systemctl stop firewalld";
 	  $disable_firewall = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k systemctl disable firewalld";
 	  $enforce = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k setenforce 0 && sed -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/sysconfig/selinux";
@@ -281,6 +279,9 @@
 	  $semanage = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k semanage fcontext -a -t httpd_sys_rw_content_t /var/lib/tftpboot";
 	  $restoreconforce = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k /sbin/restorecon -R -v /var/lib/tftpboot";
 	  
+	  } elseif(strip_tags($_COOKIE["systype"]) == "debian") {
+	  die("Debian Support... Soon");
+	  }
 	  echo '<body class="container">
 	  <br><br><br>
 	  <div class="mx-auto card">
@@ -372,6 +373,7 @@
 	fwrite($file3, $select);
 	fclose($file3);
 	
+	if(strip_tags($_POST["systype"]) == "centos") {
 	$httpd_cp = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k cp ".dirname(__FILE__)."/backup/pxeboot.conf /etc/httpd/conf.d/";
 	$tftp_cp = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k cp ".dirname(__FILE__)."/backup/tftp /etc/xinetd.d/";
 	$dnsmasq_chmod = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k chmod 777 /etc/dnsmasq.conf";
@@ -393,6 +395,12 @@
 	shell_exec($system_xinet);
 	shell_exec($system_xinet2);
 	shell_exec($system_httpd);
+	} elseif(strip_tags($_POST["systype"]) == "debian") {
+
+	die("Debian Support... Soon");
+	
+	} else {
+	}
 	  echo '<body class="container">
 	  <br><br><br>
 	  <div class="mx-auto card">

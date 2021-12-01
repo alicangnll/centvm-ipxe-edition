@@ -2,6 +2,8 @@
 include("conn.php");
 header('Content-Type: text/plain; charset=UTF-8');
 header('Cache-Control: max-age=0, must-revalidate');
+header('iPXE: On');
+
 echo '#!ipxe
 set menu-timeout 0
 set submenu-timeout ${menu-timeout}
