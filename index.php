@@ -298,7 +298,7 @@ $stmt->execute();
 while($row = $stmt->fetch()) {
 echo '<tr>
       <td data-label="Name">'.strip_tags($row["name"]).'</td>
-      <td data-label="File">'.strip_tags($row["file_location"]).'</td>
+      <td data-label="File"><a href="../pxeboot/'.strip_tags($row["file_location"]).'">'.strip_tags($row["file_location"]).'</a></td>
 	  <td data-label="Kernel">'.strip_tags($row["kernel"]).'</td>
     </tr>';
 }
