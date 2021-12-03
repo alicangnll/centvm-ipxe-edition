@@ -605,7 +605,7 @@ echo '<main class="main">
 
 <div class="user-box">
 <b>Chain Config</b><br>
-<textarea type="text" name="chainconfig" placeholder="Example Config : command1;command2;...;commandN"></textarea>
+<textarea type="text" name="chainconfig" placeholder="command1;command2;...;commandN"></textarea>
 </div>
 
 <button type="submit" >Generate</button>
