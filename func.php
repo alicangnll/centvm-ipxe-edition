@@ -93,6 +93,7 @@ echo '<nav class="menu">
 					<a class="data" href="index.php?git=pxeboot">Main Page</a>
 					<a class="data" href="index.php?git=dhcpoption">DHCP Options</a>
 					<a class="data" href="index.php?git=addimage">Add File</a>
+					<a class="data" href="index.php?git=addchain">Add Chain</a>
 					<a class="data" href="index.php?git=repair">Repair Configuration</a>
 					<a class="data" href="#">Mount List</a>
 				</li>

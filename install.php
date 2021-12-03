@@ -68,16 +68,11 @@
 	  </div>
 	  </div></body>
 	  <script>
-	  function deleteAllCookies() {
-		var cookies = document.cookie.split(";");
-		for (var i = 0; i < cookies.length; i++) {
-	  var cookie = cookies[i];
-	  var eqPos = cookie.indexOf("=");
-	  var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-	  document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-	  }
-	  }
-	  deleteAllCookies();
+	  document.cookie = "rootpwd= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+	  document.cookie = "netwdrv= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+	  document.cookie = "lang= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+	  document.cookie = "user_id= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+	  document.cookie = "admin_adi= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
 	  </script>';
 	  break;
 
@@ -108,7 +103,6 @@
 	  </select><br>
 	  <select id="systype" name="systype" class="form-control form-select" aria-label="Boot Type">
 	  <option selected>System Type</option>
-	  <option value="debian">Debian</option>
 	  <option value="centos">CentOS</option>
 	  </select><br>
 	  <input type="password" class="form-control mt-5" name="rootpwd" id="rootpwd" placeholder="Root Password"><br>
@@ -131,6 +125,7 @@
 	  $getir->ControlCookie("rootpwd");
 	  $getir->ControlCookie("netwdrv");
 	  $getir->ControlCookie("lang");
+	  
 	  $data = '{"version_name": "Cygen","version": "11","lang" : "'.strip_tags($_POST["lang"]).'", "netw": "'.strip_tags($_POST["netwdrv"]).'"}';
 	  $getir->ControlFile("update.json", $data);
 	  echo '<body class="container">
@@ -260,16 +255,15 @@
 	}";
 	$getir->ControlFile("backup/tftp", $tftpconf);
 	
-	  if(strip_tags($_COOKIE["systype"]) == "centos") {
 	  $systemctl_stopfirewall = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k systemctl stop firewalld";
 	  $systemctl_disfirewall = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k systemctl disable firewalld";
 	  
-	  $installer = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k yum install -y epel-release ipxe-bootimgs tcpdump tftp tftp-server xinetd syslinux net-tools dnsmasq zip nfs-utils tar wget policycoreutils-python-utils";
+	  $installer = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k yum install -y epel-release libguestfs-tools targetcli iscsi-initiator-utils ipxe-bootimgs tcpdump tftp tftp-server xinetd syslinux net-tools dnsmasq zip nfs-utils tar wget policycoreutils-python-utils";
 	  $mk_syslinuxfolder = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k mkdir /var/lib/tftpboot/pxelinux.cfg";
       $copy_syslinux = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k cp -v /usr/share/syslinux/* /var/lib/tftpboot";
 	  $wget1 = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k cp -v ".dirname(__FILE__)."/extra/undionly.kpxe /var/lib/tftpboot/";
 	  $wget2 = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k cp -v ".dirname(__FILE__)."/extra/wimboot /var/lib/tftpboot/ && cp ".dirname(__FILE__)."/extra/ipxe.efi /var/lib/tftpboot/";
-
+	  
 	  $stop_firewall = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k systemctl stop firewalld";
 	  $disable_firewall = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k systemctl disable firewalld";
 	  $enforce = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k setenforce 0 && sed -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/sysconfig/selinux";
@@ -279,9 +273,6 @@
 	  $semanage = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k semanage fcontext -a -t httpd_sys_rw_content_t /var/lib/tftpboot";
 	  $restoreconforce = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k /sbin/restorecon -R -v /var/lib/tftpboot";
 	  
-	  } elseif(strip_tags($_COOKIE["systype"]) == "debian") {
-	  die("Debian Support... Soon");
-	  }
 	  echo '<body class="container">
 	  <br><br><br>
 	  <div class="mx-auto card">
@@ -291,13 +282,11 @@
 	  <code>
 	  '.strip_tags($installer).'<br>
 	  '.strip_tags($mk_syslinuxfolder).'<br>
-	  '.strip_tags($copy_syslinux).'<br><br>
+	  '.strip_tags($copy_syslinux).'<br>
 	  '.strip_tags($wget1).'<br><br>
-	  '.strip_tags($wget2).'<br><br>
-	  '.strip_tags($mkdir).'<br><br>
-	  '.strip_tags($mkdir2).'<br><br>
-	  '.strip_tags($cp_default).'<br><br>
-	  
+	  '.strip_tags($wget2).'<br>
+	  '.strip_tags($mkdir).'<br>
+	  '.strip_tags($mkdir2).'<br>
 	  '.strip_tags($stop_firewall).'<br>
 	  '.strip_tags($disable_firewall).'<br>
 	  '.strip_tags($enforce).'<br>
@@ -373,7 +362,6 @@
 	fwrite($file3, $select);
 	fclose($file3);
 	
-	if(strip_tags($_POST["systype"]) == "centos") {
 	$httpd_cp = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k cp ".dirname(__FILE__)."/backup/pxeboot.conf /etc/httpd/conf.d/";
 	$tftp_cp = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k cp ".dirname(__FILE__)."/backup/tftp /etc/xinetd.d/";
 	$dnsmasq_chmod = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k chmod 777 /etc/dnsmasq.conf";
@@ -395,14 +383,8 @@
 	shell_exec($system_xinet);
 	shell_exec($system_xinet2);
 	shell_exec($system_httpd);
-	} elseif(strip_tags($_POST["systype"]) == "debian") {
-
-	die("Debian Support... Soon");
-	
-	} else {
-	}
 	  echo '<body class="container">
-	  <br><br><br>
+	  <br><br><br> 
 	  <div class="mx-auto card">
 	  <div class="card-body">
 	  <b>First Installation</b>
@@ -419,26 +401,36 @@
 	  '.strip_tags($system_dnsmasq2).'<br>
 	  '.strip_tags($system_xinet).'<br>
 	  '.strip_tags($system_xinet2).'<br>
-	  '.strip_tags($system_httpd).'<br><br>
-	  '.$select.'<br>
+	  '.strip_tags($system_httpd).'<br>
+	  '.$select.'<br><br>
 	  </code><br>
 	  <div class="form-group">
 	  <br><br><a href="install.php?git=install3" " class="btn btn-dark">Next</button><br>
 	  </div></div></div></body>';
 	  break;
 
-	  case 'install3':	  
+	  case 'install3':
+	  if(file_exists("yukle.lock")) {
+	  unlink("yukle.lock");
 	  $txt = md5(rand(5,15));
-	  $getir->ControlFile("yukle.lock", $txt);
-	  
-	  if(file_exists("backup/centvm.service")) {
-	  unlink("backup/centvm.service");
+	  $fp = fopen("yukle.lock","a");
+	  fwrite($fp,$txt);
+	  fclose($fp);
 	  } else {
+	  $txt = md5(rand(5,15));
+	  $fp = fopen("yukle.lock","a");
+	  fwrite($fp,$txt);
+	  fclose($fp);
 	  }
-	  if(file_exists("backup/custom_start.sh")) {
-	  unlink("backup/custom_start.sh");
-	  } else {
-	  }
+
+	if(file_exists("backup/centvm.service")) {
+	unlink("backup/centvm.service");
+	} else {
+	}
+	if(file_exists("backup/custom_start.sh")) {
+	unlink("backup/custom_start.sh");
+	} else {
+	}
 	$select = "systemctl stop firewalld
 	systemctl disable firewalld
 	setenforce 0 && sed -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/sysconfig/selinux
@@ -447,7 +439,10 @@
 	chcon -R -t httpd_sys_rw_content_t /var/lib/tftpboot
 	semanage fcontext -a -t httpd_sys_rw_content_t /var/lib/tftpboot
 	/sbin/restorecon -R -v /var/lib/tftpboot";
-	$getir->ControlFile("backup/custom_start.sh", $select);
+
+	$file3 = fopen("backup/custom_start.sh", "a");
+	fwrite($file3, strip_tags($select));
+	fclose($file3);
 
 	$cp_start = "cp ".dirname(__FILE__)."/backup/centvm.service /etc/systemd/system/";
 	$sysctl_start = "systemctl start centvm.service";

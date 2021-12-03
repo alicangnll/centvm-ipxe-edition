@@ -2,8 +2,6 @@
 include("conn.php");
 header('Content-Type: text/plain; charset=UTF-8');
 header('Cache-Control: max-age=0, must-revalidate');
-header('iPXE: On');
-
 echo '#!ipxe
 set menu-timeout 0
 set submenu-timeout ${menu-timeout}
@@ -39,107 +37,33 @@ goto ${selected}
 $stmt = $db->prepare('SELECT * FROM ipxe_list ORDER BY id');
 $stmt->execute();
 while($row = $stmt->fetch()) {
-
 if(strip_tags($row["boot_type"]) == "oth") {
 echo '
 :'.strtolower(strip_tags(str_replace(" ", "", $row["name"]))).'';
 
 if(empty(strtolower(strip_tags($row["kernel"])))) {
 } else {
-if(strstr($row["kernel"], "http")) { 
 echo '
-kernel '.strtolower(strip_tags($row["kernel"])).'';
-} else {
-echo '
-kernel http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strtolower(strip_tags($row["kernel"])).'';
+kernel http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strtolower(strip_tags(trim($row["kernel"]))).'';
 }
-
-}
-if(empty(strtolower(strip_tags($row["other"])))) {
-
-if(strstr($row["file_location"], "http")) { 
-echo '
-initrd '.strip_tags($row["file_location"]).'
-boot || goto failed
-';
-} else {
 echo '
 initrd http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strip_tags($row["file_location"]).'
 boot || goto failed
 ';
-}
-} else {
-
-if(strstr($row["file_location"], "http")) { 
-echo '
-initrd '.strip_tags($row["file_location"]).'
-'.strip_tags($row["other"]).'
-boot || goto failed
-';
-} else {
-echo '
-initrd http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strip_tags($row["file_location"]).'
-'.strip_tags($row["other"]).'
-boot || goto failed
-';
-}
-
-}
-
-} elseif(strip_tags($row["boot_type"]) == "vhdx") { 
-if(empty(strtolower(strip_tags($row["other"])))) {
-echo '
-:'.strtolower(strip_tags(str_replace(" ", "", $row["name"]))).'';
-
-if(strstr($row["kernel"], "http")) { 
-echo '
-kernel '.strtolower(strip_tags($row["kernel"])).'';
-} else {
-echo '
-kernel http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strtolower(strip_tags($row["kernel"])).'';
-}
-if(strstr($row["file_location"], "http")) { 
-echo '
-initrd '.strip_tags($row["file_location"]).'
-boot || goto failed';
-} else {
-echo '
-initrd http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strip_tags($row["file_location"]).'
-boot || goto failed';
-}
-
-} else {
-echo '
-:'.strtolower(strip_tags(str_replace(" ", "", $row["name"]))).'';
-
-if(strstr($row["kernel"], "http")) { 
-echo '
-kernel '.strtolower(strip_tags($row["kernel"])).'';
-} else {
-echo '
-kernel http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strtolower(strip_tags($row["kernel"])).'';
-}
-
-if(strstr($row["file_location"], "http")) { 
-echo '
-initrd '.strip_tags($row["file_location"]).'
-boot || goto failed
-';
-} else {
-echo '
-initrd http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strip_tags($row["file_location"]).'
-boot || goto failed
-';
-}
-}
-
 } else {
 echo '
 boot || goto failed';
 }
 
 }
-
+$stmt = $db->prepare('SELECT * FROM chain_list ORDER BY id');
+$stmt->execute();
+while($row = $stmt->fetch()) {
+echo '
+:'.strtolower(strip_tags(str_replace(" ", "", $row["chainname"]))).'
+chain http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strip_tags($row["chain_file"]).' --config-file="'.strip_tags($row["chain_config"]).'"
+boot || goto failed';
+}
 echo '
 
 :failed

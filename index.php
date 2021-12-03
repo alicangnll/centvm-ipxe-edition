@@ -252,11 +252,21 @@ if(!is_dir($_DIRFILE)){
 $ext = pathinfo($_DIRFILE, PATHINFO_EXTENSION);
 if(strstr($ext, 'c32')) {
 } elseif(strstr($ext, 'bin')) {
-} elseif(strstr($ext, 'exe')) {
+} elseif(strstr($ext, 'pif')) {
+} elseif(strstr($ext, 'sys')) {
 } elseif(strstr($ext, 'efi')) {
 } elseif(strstr($ext, 'com')) {
 } elseif(strstr($ext, 'ipxe')) {
+} elseif(strstr($ext, ' ')) {
+} elseif(strstr($ext, 'exe')) {
 } elseif(strstr($ext, 'kpxe')) {
+} elseif(strstr($ext, 'lkrn')) {
+} elseif(strstr($ext, 'mbr')) {
+} elseif(strstr($ext, 'vhd')) {
+echo '<tr>
+<td data-label="File">'.strip_tags($_DIRFILE).'</td>
+<td data-label="Action"><a href="index.php?git=pxegen&name='.strip_tags($_DIRFILE).'">Create Boot File</a></td>
+</tr>';
 } elseif(strstr($ext, 'cfg')) {
 } elseif(strstr($_DIRFILE, 'memdisk')) {
 } elseif(strstr($_DIRFILE, 'wimboot')) {
@@ -324,29 +334,28 @@ echo '<main class="main">
 <div class="login-box">
 <h1>Boot File Generator</h1>';
 $getir->HeadMenu("PXE Panel");
-echo '<form action="index.php?git=ppxegen" method="post">';
-echo '<div class="user-box">
+echo '<form action="index.php?git=ppxegen" method="post">
+<div class="user-box">
 <b>PXE Name</b><br>
 <input type="text" name="pxename" placeholder="FreeDOS" required="">
-</div>';
-echo '<div class="user-box">
+</div>
+<div class="user-box">
 <b>PXE Kernel</b><br>
-<textarea type="text" name="kernel" placeholder="PXE Kernel"></textarea>
-</div>';
-echo '<input type="hidden" name="pxefilename" value="'.strip_tags($_GET["name"]).'" required="">';
-echo '<div class="user-box">
+<textarea type="text" name="kernel" placeholder="PXE Kernel / No add HTTP or HTTPS"></textarea>
+</div>
+<input type="hidden" name="pxefilename" value="'.strip_tags($_GET["name"]).'" required="">
+<div class="user-box">
 <b>PXE Other Config</b><br>
 <textarea type="text" name="otherpxeconfig" placeholder="Other Configs"></textarea>
-</div>';
+</div>
 
-echo '<div class="user-box">
+<div class="user-box">
 <b>PXE Boot Type</b><br>
 <select class="form-control form-select" aria-label="PXE Boot Type" id="boottype" name="boottype">
-<option value="vhd">VHD Drive</option>
-<option value="oth">Others</option>
+<option value="oth">Others / ISO</option>
 </select>
-</div>';
-echo '<button type="submit" href="#">Generate</button>
+</div>
+<button type="submit" href="#">Generate</button>
 </form></div></main></div>';
 break;
 
@@ -358,7 +367,7 @@ echo '<main class="main">
 <div class="login-box">
 <h1>Boot File Generator</h1>';
 $getir->HeadMenu("PXE Panel");
-  $update = $db->prepare("INSERT INTO ipxe_list(name, file_location, other, kernel, boot_type) VALUES (:ad, :filelocation, :other, :kernel, :boot) ");
+$update = $db->prepare("INSERT INTO ipxe_list(name, file_location, other, kernel, boot_type) VALUES (:ad, :filelocation, :other, :kernel, :boot) ");
   $update->bindValue(':ad', strip_tags($_POST["pxename"]));
   $update->bindValue(':filelocation', strip_tags($_POST["pxefilename"]));
   $update->bindValue(':other', strip_tags($_POST["otherpxeconfig"]));
@@ -496,13 +505,6 @@ $getir->HeadMenu("PXE Panel");
 echo '<div class="container">';
 $getir->NavBar();
 echo '<main class="main">
-<br><br><br><br><br><br><br><br>';
-echo '
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
 <br><br><br><br>
 <pre>'.shell_exec("netstat -o state established | grep -a CONNECTED").'</pre>
 </main></div>';
@@ -516,13 +518,6 @@ echo '<div class="container">';
 $getir->NavBar();
 echo '<main class="main">
 <h1>PHP Information</h1>
-<br><br><br><br><br><br><br><br>';
-echo '
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
 <br><br><br><br>
 <pre>'.shell_exec("php -v").'</pre>
 </main></div>';
@@ -546,14 +541,56 @@ echo '<main class="main">
 <br><br><br><br><br><br><br><br>';
 $getir->HeadMenu("PXE Panel");
 echo '
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br><br><br>
 <pre>'.$sys.'</pre>
 </main></div>';
+break;
+
+case 'addchain':
+$getir->logincheck($_SESSION['admin_adi']);
+$getir->HeadMenu("PXE Panel");
+$getir->NavBar();
+echo '<main class="main">
+<div class="login-box">
+<form action="index.php?git=pchainadd" method="post">
+
+<div class="user-box">
+<b>Chain Name</b><br>
+<input type="text" name="chainname" placeholder="GRUB Windows" required="">
+</div>
+
+<div class="user-box">
+<b>Chain File</b><br>
+<input type="text" name="chainfile" placeholder="grub.exe" required="">
+</div>
+
+<div class="user-box">
+<b>Chain Config</b><br>
+<textarea type="text" name="chainconfig" placeholder="Configs"></textarea>
+</div>
+
+<button type="submit" >Generate</button>
+</form></div></main>';
+break;
+
+case 'pchainadd':
+$getir->logincheck($_SESSION['admin_adi']);
+  $update = $db->prepare("INSERT INTO chain_list(chainname, chain_file, chain_config) VALUES (:ad, :cfile, :ccfg) ");
+  $update->bindValue(':ad', strip_tags($_POST["chainname"]));
+  $update->bindValue(':cfile', strip_tags(''.$_POST["chainfile"].''));
+  $update->bindValue(':ccfg', strip_tags($_POST["chainconfig"]));
+  $update->execute();
+  if($row = $update->rowCount()) {
+    echo "<script LANGUAGE='JavaScript'>
+    window.alert('Succesfully Updated');
+    window.location.href='index.php?git=pxeboot';
+    </script>";
+  } else {
+    echo "<script LANGUAGE='JavaScript'>
+    window.alert('Unsuccesfully Updated');
+    window.location.href='index.php?git=pxeboot';
+    </script>";
+    unlink($data);
+  }
 break;
 
 case 'addimage':
@@ -564,14 +601,7 @@ echo '<div class="container">
 $getir->NavBar();
 echo '<main class="main">
 <h1>Add Image</h1>
-<br><br><br><br><br><br><br><br>';
-echo '
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br><br><br>
+<br><br><br><br><br><br><br><br>
 <div class="login-box">
 <form action="index.php?git=addwget" method="post">
 <div class="user-box">
