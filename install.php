@@ -261,8 +261,7 @@
 	  $installer = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k yum install -y epel-release libguestfs-tools targetcli iscsi-initiator-utils ipxe-bootimgs tcpdump tftp tftp-server xinetd syslinux net-tools dnsmasq zip nfs-utils tar wget policycoreutils-python-utils";
 	  $mk_syslinuxfolder = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k mkdir /var/lib/tftpboot/pxelinux.cfg";
       $copy_syslinux = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k cp -v /usr/share/syslinux/* /var/lib/tftpboot";
-	  $wget1 = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k cp -v ".dirname(__FILE__)."/extra/undionly.kpxe /var/lib/tftpboot/";
-	  $wget2 = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k cp -v ".dirname(__FILE__)."/extra/wimboot /var/lib/tftpboot/ && cp ".dirname(__FILE__)."/extra/ipxe.efi /var/lib/tftpboot/";
+	  $wget1 = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k cp -v ".dirname(__FILE__)."/extra/* /var/lib/tftpboot/";
 	  
 	  $stop_firewall = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k systemctl stop firewalld";
 	  $disable_firewall = "echo '".strip_tags($_COOKIE["rootpwd"])."' | sudo -S -k systemctl disable firewalld";
@@ -283,8 +282,7 @@
 	  '.strip_tags($installer).'<br>
 	  '.strip_tags($mk_syslinuxfolder).'<br>
 	  '.strip_tags($copy_syslinux).'<br>
-	  '.strip_tags($wget1).'<br><br>
-	  '.strip_tags($wget2).'<br>
+	  '.strip_tags($wget1).'<br>
 	  '.strip_tags($mkdir).'<br>
 	  '.strip_tags($mkdir2).'<br>
 	  '.strip_tags($stop_firewall).'<br>

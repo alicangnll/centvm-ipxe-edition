@@ -23,6 +23,13 @@ echo 'item --key p '.strtolower(strip_tags(str_replace(" ", "", $row["name"]))).
 ';
 }
 
+$stmt = $db->prepare('SELECT * FROM chain_list ORDER BY id');
+$stmt->execute();
+while($row = $stmt->fetch()) {
+echo 'item --key p '.strtolower(strip_tags(str_replace(" ", "", $row["chainname"]))).'     '.strtoupper(strip_tags($row["chainname"])).' installation
+';
+}
+
 echo 'item --gap --             ------------------------- Advanced options -------------------------------
 item --key c config       Configure settings
 item shell                Drop to iPXE shell
