@@ -257,7 +257,7 @@ if(strstr($ext, 'c32')) {
 } elseif(strstr($ext, 'efi')) {
 } elseif(strstr($ext, 'com')) {
 } elseif(strstr($ext, 'ipxe')) {
-} elseif(strstr($ext, ' ')) {
+} elseif(strstr($ext, 'lst')) {
 } elseif(strstr($ext, 'exe')) {
 } elseif(strstr($ext, 'kpxe')) {
 } elseif(strstr($ext, 'lkrn')) {
@@ -608,11 +608,41 @@ echo '<main class="main">
 <textarea type="text" name="chainconfig" placeholder="command1;command2;...;commandN"></textarea>
 </div>
 
+<div class="user-box">
+<b>Chain lST</b><br>
+<textarea type="text" name="chainlst" placeholder="Chain lST"></textarea>
+</div>
+
 <button type="submit" >Generate</button>
 </form></div></main>';
 break;
 
 case 'pchainadd':
+$getir->logincheck($_SESSION['admin_adi']);
+if(isset($_POST["chainlst"])) {
+$data = escapeshellcmd($_POST["chainlst"]);
+
+$getir->ControlFile("backup/".strip_tags($_POST["chainconfig"])."", $data);
+shell_exec("cp -v ".dirname(__FILE__)."/backup/".strip_tags($_POST["chainconfig"])." /var/lib/tftpboot");
+
+  $update = $db->prepare("INSERT INTO chain_list(chainname, chain_file, chain_config) VALUES (:ad, :cfile, :ccfg) ");
+  $update->bindValue(':ad', strip_tags($_POST["chainname"]));
+  $update->bindValue(':cfile', strip_tags(''.$_POST["chainfile"].''));
+  $update->bindValue(':ccfg', strip_tags("".strip_tags($_POST["chainconfig"]).""));
+  $update->execute();
+  if($row = $update->rowCount()) {
+    echo "<script LANGUAGE='JavaScript'>
+    window.alert('Succesfully Updated');
+    window.location.href='index.php?git=pxeboot';
+    </script>";
+  } else {
+    echo "<script LANGUAGE='JavaScript'>
+    window.alert('Unsuccesfully Updated');
+    window.location.href='index.php?git=pxeboot';
+    </script>";
+    unlink($data);
+  }
+} else {
 $getir->logincheck($_SESSION['admin_adi']);
   $update = $db->prepare("INSERT INTO chain_list(chainname, chain_file, chain_config) VALUES (:ad, :cfile, :ccfg) ");
   $update->bindValue(':ad', strip_tags($_POST["chainname"]));
@@ -631,6 +661,7 @@ $getir->logincheck($_SESSION['admin_adi']);
     </script>";
     unlink($data);
   }
+}
 break;
 
 case 'addimage':
