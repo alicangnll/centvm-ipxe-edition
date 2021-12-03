@@ -282,6 +282,45 @@ echo '<tr>
 
 }
 echo '</tbody></table>';
+
+echo '<h1>PXE Direct Boot</h1>
+<table class="products-table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>File</th>
+	  <th>Kernel</th>
+    </tr>
+  </thead>
+  <tbody>';
+$stmt = $db->prepare('SELECT * FROM ipxe_list ORDER BY id');
+$stmt->execute();
+while($row = $stmt->fetch()) {
+echo '<tr>
+      <td data-label="Name">'.strip_tags($row["name"]).'</td>
+      <td data-label="File">'.strip_tags($row["file_location"]).'</td>
+	  <td data-label="Kernel">'.strip_tags($row["kernel"]).'</td>
+    </tr>';
+}
+echo '</tbody></table>';
+echo '<h1>Chainloaders</h1>
+<table class="products-table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Configs</th>
+    </tr>
+  </thead>
+  <tbody>';
+$stmt = $db->prepare('SELECT * FROM chain_list ORDER BY id');
+$stmt->execute();
+while($row = $stmt->fetch()) {
+echo '<tr>
+      <td data-label="File">'.strip_tags($row["chainname"]).'</td>
+      <td data-label="Configs">'.strip_tags($row["chain_config"]).'</td>
+    </tr>';
+}
+echo '</tbody></table>';
 ?>
 <script id="source" language="javascript" type="text/javascript">
 $(document).ready(function() {
