@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Anamakine: localhost
--- Üretim Zamanı: 30 Kas 2021, 18:15:23
+-- Üretim Zamanı: 03 Ara 2021, 18:37:25
 -- Sunucu sürümü: 10.3.28-MariaDB
 -- PHP Sürümü: 7.2.24
 
@@ -47,6 +47,26 @@ INSERT INTO `admin_list` (`admin_id`, `admin_email`, `admin_usrname`, `admin_pas
 -- --------------------------------------------------------
 
 --
+-- Tablo için tablo yapısı `chain_list`
+--
+
+CREATE TABLE `chain_list` (
+  `id` int(11) NOT NULL,
+  `chainname` varchar(255) NOT NULL,
+  `chain_file` varchar(255) NOT NULL,
+  `chain_config` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Tablo döküm verisi `chain_list`
+--
+
+INSERT INTO `chain_list` (`id`, `chainname`, `chain_file`, `chain_config`) VALUES
+(1, 'GRUB HDD', 'grub.exe', 'root (hd0,0);chainloader +1');
+
+-- --------------------------------------------------------
+
+--
 -- Tablo için tablo yapısı `ipxe_list`
 --
 
@@ -64,7 +84,7 @@ CREATE TABLE `ipxe_list` (
 --
 
 INSERT INTO `ipxe_list` (`id`, `name`, `file_location`, `other`, `kernel`, `boot_type`) VALUES
-(1, 'AllInOne', 'allinone.img', '', '', 'oth');
+(1, 'AllInOne', 'allinone.img', '', ' memdisk', 'oth');
 
 --
 -- Dökümü yapılmış tablolar için indeksler
@@ -75,6 +95,12 @@ INSERT INTO `ipxe_list` (`id`, `name`, `file_location`, `other`, `kernel`, `boot
 --
 ALTER TABLE `admin_list`
   ADD PRIMARY KEY (`admin_id`);
+
+--
+-- Tablo için indeksler `chain_list`
+--
+ALTER TABLE `chain_list`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Tablo için indeksler `ipxe_list`
@@ -91,6 +117,12 @@ ALTER TABLE `ipxe_list`
 --
 ALTER TABLE `admin_list`
   MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- Tablo için AUTO_INCREMENT değeri `chain_list`
+--
+ALTER TABLE `chain_list`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Tablo için AUTO_INCREMENT değeri `ipxe_list`
