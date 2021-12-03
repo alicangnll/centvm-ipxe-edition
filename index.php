@@ -577,7 +577,7 @@ echo '<div class="container">';
 $getir->NavBar();
 echo '<main class="main">
 <h1>Repair Information</h1>
-<br><br><br><br><br><br><br><br>';
+<br><br>';
 $getir->HeadMenu("PXE Panel");
 echo '
 <pre>'.$sys.'</pre>
@@ -590,6 +590,7 @@ $getir->HeadMenu("PXE Panel");
 $getir->NavBar();
 echo '<main class="main">
 <div class="login-box">
+
 <form action="index.php?git=pchainadd" method="post">
 
 <div class="user-box">
@@ -604,7 +605,7 @@ echo '<main class="main">
 
 <div class="user-box">
 <b>Chain Config</b><br>
-<textarea type="text" name="chainconfig" placeholder="Configs"></textarea>
+<textarea type="text" name="chainconfig" placeholder="Example Config : command1;command2;...;commandN"></textarea>
 </div>
 
 <button type="submit" >Generate</button>
