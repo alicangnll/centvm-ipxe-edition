@@ -10,3 +10,6 @@ Default Password : 19742008 <br></pre>
 <img src="img/3.png"></br>
 <img src="img/4.png"></br>
 <img src="img/5.png"></br>
+<img src="img/6.png"></br>
+<img src="img/7.png"></br>
+<img src="img/8.png"></br>
