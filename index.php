@@ -608,11 +608,6 @@ echo '<main class="main">
 <textarea type="text" name="chainconfig" placeholder="command1;command2;...;commandN"></textarea>
 </div>
 
-<div class="user-box">
-<b>Chain lST</b><br>
-<textarea type="text" name="chainlst" placeholder="Chain lST"></textarea>
-</div>
-
 <button type="submit" >Generate</button>
 </form></div></main>';
 break;
@@ -620,11 +615,6 @@ break;
 case 'pchainadd':
 $getir->logincheck($_SESSION['admin_adi']);
 if(isset($_POST["chainlst"])) {
-$data = escapeshellcmd("".$_POST["chainlst"]."");
-
-$getir->ControlFile("backup/".strip_tags($_POST["chainconfig"])."", $data);
-shell_exec("cp -v ".dirname(__FILE__)."/backup/".strip_tags($_POST["chainconfig"])." /var/lib/tftpboot");
-
   $update = $db->prepare("INSERT INTO chain_list(chainname, chain_file, chain_config) VALUES (:ad, :cfile, :ccfg) ");
   $update->bindValue(':ad', strip_tags($_POST["chainname"]));
   $update->bindValue(':cfile', strip_tags(''.$_POST["chainfile"].''));

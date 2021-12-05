@@ -66,17 +66,10 @@ boot || goto failed';
 $stmt = $db->prepare('SELECT * FROM chain_list ORDER BY id');
 $stmt->execute();
 while($row = $stmt->fetch()) {
-if(strstr(strip_tags($row["chain_config"]), 'lst')) {
 echo '
 :'.strtolower(strip_tags(str_replace(" ", "", $row["chainname"]))).'
-chain '.strip_tags($row["chain_file"]).' --config-file="http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strip_tags($row["chain_config"]).'"
+chain http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strip_tags($row["chain_file"]).' --config-file="'.strip_tags($row["chain_config"]).'"
 boot || goto failed';
-} else {
-echo '
-:'.strtolower(strip_tags(str_replace(" ", "", $row["chainname"]))).'
-chain '.strip_tags($row["chain_file"]).' --config-file="'.strip_tags($row["chain_config"]).'"
-boot || goto failed';
-}
 }
 echo '
 
