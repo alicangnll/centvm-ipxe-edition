@@ -51,10 +51,10 @@ echo '
 if(empty(strtolower(strip_tags($row["kernel"])))) {
 } else {
 echo '
-kernel http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strtolower(strip_tags(trim($row["kernel"]))).'';
+kernel '.strtolower(strip_tags(trim($row["kernel"]))).'';
 }
 echo '
-initrd http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strip_tags($row["file_location"]).'
+initrd '.strip_tags($row["file_location"]).'
 boot || goto failed
 ';
 } else {
@@ -66,10 +66,17 @@ boot || goto failed';
 $stmt = $db->prepare('SELECT * FROM chain_list ORDER BY id');
 $stmt->execute();
 while($row = $stmt->fetch()) {
+if(strstr(strip_tags($row["chain_config"]), 'lst')) {
 echo '
 :'.strtolower(strip_tags(str_replace(" ", "", $row["chainname"]))).'
-chain http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strip_tags($row["chain_file"]).' --config-file="'.strip_tags($row["chain_config"]).'"
+chain '.strip_tags($row["chain_file"]).' --config-file="http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strip_tags($row["chain_config"]).'"
 boot || goto failed';
+} else {
+echo '
+:'.strtolower(strip_tags(str_replace(" ", "", $row["chainname"]))).'
+chain '.strip_tags($row["chain_file"]).' --config-file="'.strip_tags($row["chain_config"]).'"
+boot || goto failed';
+}
 }
 echo '
 

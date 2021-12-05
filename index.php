@@ -620,7 +620,7 @@ break;
 case 'pchainadd':
 $getir->logincheck($_SESSION['admin_adi']);
 if(isset($_POST["chainlst"])) {
-$data = escapeshellcmd($_POST["chainlst"]);
+$data = escapeshellcmd("".$_POST["chainlst"]."");
 
 $getir->ControlFile("backup/".strip_tags($_POST["chainconfig"])."", $data);
 shell_exec("cp -v ".dirname(__FILE__)."/backup/".strip_tags($_POST["chainconfig"])." /var/lib/tftpboot");
@@ -659,7 +659,6 @@ $getir->logincheck($_SESSION['admin_adi']);
     window.alert('Unsuccesfully Updated');
     window.location.href='index.php?git=pxeboot';
     </script>";
-    unlink($data);
   }
 }
 break;

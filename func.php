@@ -205,7 +205,9 @@ function ControlCookie($post) {
 	}
 }
 
-function ControlFile($file, $txt) {
+function ControlFile($file, $txt2) {
+$vowels = array("\\");
+$txt = str_replace($vowels , "", $txt2);
 if (file_exists("".$file."")) {
 unlink("".$file."");
 $fp = fopen("".$file."","a");
