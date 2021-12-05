@@ -5,6 +5,7 @@ header('Cache-Control: max-age=0, must-revalidate');
 echo '#!ipxe
 set menu-timeout 0
 set submenu-timeout ${menu-timeout}
+
 isset ${menu-default} || set menu-default exit
 cpuid --ext 29 && set arch x64 || set arch x86
 cpuid --ext 29 && set archl amd64 || set archl i386
@@ -66,9 +67,11 @@ boot || goto failed';
 $stmt = $db->prepare('SELECT * FROM chain_list ORDER BY id');
 $stmt->execute();
 while($row = $stmt->fetch()) {
+$vowels = array("//");
+$txt = str_replace($vowels , "tftp://".$_SERVER['HTTP_HOST']."/", strip_tags($row["chain_config"]));
 echo '
 :'.strtolower(strip_tags(str_replace(" ", "", $row["chainname"]))).'
-chain http://'.$_SERVER['HTTP_HOST'].'/pxeboot/'.strip_tags($row["chain_file"]).' --config-file="'.strip_tags($row["chain_config"]).'"
+chain tftp://'.$_SERVER['HTTP_HOST'].'/grub.exe --config-file="'.$txt.'"
 boot || goto failed';
 }
 echo '

@@ -615,6 +615,7 @@ break;
 case 'pchainadd':
 $getir->logincheck($_SESSION['admin_adi']);
 if(isset($_POST["chainlst"])) {
+
   $update = $db->prepare("INSERT INTO chain_list(chainname, chain_file, chain_config) VALUES (:ad, :cfile, :ccfg) ");
   $update->bindValue(':ad', strip_tags($_POST["chainname"]));
   $update->bindValue(':cfile', strip_tags(''.$_POST["chainfile"].''));
