@@ -609,7 +609,7 @@ break;
 
 case 'pchainadd':
 $getir->logincheck($_SESSION['admin_adi']);
-  $update = $db->prepare("INSERT INTO chain_list(chainname chain_config) VALUES (:ad, :ccfg) ");
+  $update = $db->prepare("INSERT INTO chain_list(chainname, chain_config) VALUES (:ad, :ccfg) ");
   $update->bindValue(':ad', strip_tags($_POST["chainname"]));
   $update->bindValue(':ccfg', strip_tags($_POST["chainconfig"]));
   $update->execute();
