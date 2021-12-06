@@ -599,11 +599,6 @@ echo '<main class="main">
 </div>
 
 <div class="user-box">
-<b>Chain File</b><br>
-<input type="text" name="chainfile" placeholder="grub.exe" required="">
-</div>
-
-<div class="user-box">
 <b>Chain Config</b><br>
 <textarea type="text" name="chainconfig" placeholder="command1;command2;...;commandN"></textarea>
 </div>
@@ -614,30 +609,8 @@ break;
 
 case 'pchainadd':
 $getir->logincheck($_SESSION['admin_adi']);
-if(isset($_POST["chainlst"])) {
-
-  $update = $db->prepare("INSERT INTO chain_list(chainname, chain_file, chain_config) VALUES (:ad, :cfile, :ccfg) ");
+  $update = $db->prepare("INSERT INTO chain_list(chainname chain_config) VALUES (:ad, :ccfg) ");
   $update->bindValue(':ad', strip_tags($_POST["chainname"]));
-  $update->bindValue(':cfile', strip_tags(''.$_POST["chainfile"].''));
-  $update->bindValue(':ccfg', strip_tags("".strip_tags($_POST["chainconfig"]).""));
-  $update->execute();
-  if($row = $update->rowCount()) {
-    echo "<script LANGUAGE='JavaScript'>
-    window.alert('Succesfully Updated');
-    window.location.href='index.php?git=pxeboot';
-    </script>";
-  } else {
-    echo "<script LANGUAGE='JavaScript'>
-    window.alert('Unsuccesfully Updated');
-    window.location.href='index.php?git=pxeboot';
-    </script>";
-    unlink($data);
-  }
-} else {
-$getir->logincheck($_SESSION['admin_adi']);
-  $update = $db->prepare("INSERT INTO chain_list(chainname, chain_file, chain_config) VALUES (:ad, :cfile, :ccfg) ");
-  $update->bindValue(':ad', strip_tags($_POST["chainname"]));
-  $update->bindValue(':cfile', strip_tags(''.$_POST["chainfile"].''));
   $update->bindValue(':ccfg', strip_tags($_POST["chainconfig"]));
   $update->execute();
   if($row = $update->rowCount()) {
@@ -651,7 +624,6 @@ $getir->logincheck($_SESSION['admin_adi']);
     window.location.href='index.php?git=pxeboot';
     </script>";
   }
-}
 break;
 
 case 'addimage':

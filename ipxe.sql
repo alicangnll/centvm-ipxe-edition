@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Anamakine: localhost
--- Üretim Zamanı: 03 Ara 2021, 18:37:25
+-- Üretim Zamanı: 06 Ara 2021, 20:10:20
 -- Sunucu sürümü: 10.3.28-MariaDB
 -- PHP Sürümü: 7.2.24
 
@@ -52,17 +52,16 @@ INSERT INTO `admin_list` (`admin_id`, `admin_email`, `admin_usrname`, `admin_pas
 
 CREATE TABLE `chain_list` (
   `id` int(11) NOT NULL,
-  `chainname` varchar(255) NOT NULL,
-  `chain_file` varchar(255) NOT NULL,
-  `chain_config` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `chainname` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `chain_config` text CHARACTER SET latin1 NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_turkish_ci;
 
 --
 -- Tablo döküm verisi `chain_list`
 --
 
-INSERT INTO `chain_list` (`id`, `chainname`, `chain_file`, `chain_config`) VALUES
-(1, 'GRUB HDD', 'grub.exe', 'root (hd0,0);chainloader +1');
+INSERT INTO `chain_list` (`id`, `chainname`, `chain_config`) VALUES
+(1, 'GRUB WINDOWS XP', 'menu.lst');
 
 -- --------------------------------------------------------
 
@@ -84,7 +83,8 @@ CREATE TABLE `ipxe_list` (
 --
 
 INSERT INTO `ipxe_list` (`id`, `name`, `file_location`, `other`, `kernel`, `boot_type`) VALUES
-(1, 'AllInOne', 'allinone.img', '', ' memdisk', 'oth');
+(1, 'iPXE', 'ipxe.iso', '', 'memdisk raw iso', 'oth'),
+(2, 'FreeDOS', 'fdboot.img', '', 'memdisk raw', 'oth');
 
 --
 -- Dökümü yapılmış tablolar için indeksler
@@ -128,7 +128,7 @@ ALTER TABLE `chain_list`
 -- Tablo için AUTO_INCREMENT değeri `ipxe_list`
 --
 ALTER TABLE `ipxe_list`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

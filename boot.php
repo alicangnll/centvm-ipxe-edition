@@ -55,7 +55,7 @@ echo '
 kernel '.strtolower(strip_tags(trim($row["kernel"]))).'';
 }
 echo '
-initrd '.strip_tags($row["file_location"]).'
+initrd tftp://'.$_SERVER['HTTP_HOST'].'/'.strip_tags($row["file_location"]).'
 boot || goto failed
 ';
 } else {
@@ -68,7 +68,7 @@ $stmt = $db->prepare('SELECT * FROM chain_list ORDER BY id');
 $stmt->execute();
 while($row = $stmt->fetch()) {
 $vowels = array("//");
-$txt = str_replace($vowels , "tftp://".$_SERVER['HTTP_HOST']."/", strip_tags($row["chain_config"]));
+$txt = str_replace($vowels , "http://".$_SERVER['HTTP_HOST']."/pxeboot/", strip_tags($row["chain_config"]));
 echo '
 :'.strtolower(strip_tags(str_replace(" ", "", $row["chainname"]))).'
 chain tftp://'.$_SERVER['HTTP_HOST'].'/grub.exe --config-file="'.$txt.'"
@@ -76,7 +76,7 @@ boot || goto failed';
 }
 echo '
 
-:failed
+:failed 
 echo Booting failed, dropping to shell
 goto shell
 
