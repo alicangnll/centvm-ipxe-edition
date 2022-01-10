@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Anamakine: localhost
--- Üretim Zamanı: 06 Ara 2021, 20:10:20
+-- Üretim Zamanı: 10 Oca 2022, 19:44:39
 -- Sunucu sürümü: 10.3.28-MariaDB
 -- PHP Sürümü: 7.2.24
 
@@ -83,8 +83,7 @@ CREATE TABLE `ipxe_list` (
 --
 
 INSERT INTO `ipxe_list` (`id`, `name`, `file_location`, `other`, `kernel`, `boot_type`) VALUES
-(1, 'iPXE', 'ipxe.iso', '', 'memdisk raw iso', 'oth'),
-(2, 'FreeDOS', 'fdboot.img', '', 'memdisk raw', 'oth');
+(1, 'iPXE', 'ipxe.iso', '', 'memdisk raw iso', 'oth');
 
 --
 -- Dökümü yapılmış tablolar için indeksler
@@ -116,7 +115,7 @@ ALTER TABLE `ipxe_list`
 -- Tablo için AUTO_INCREMENT değeri `admin_list`
 --
 ALTER TABLE `admin_list`
-  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Tablo için AUTO_INCREMENT değeri `chain_list`

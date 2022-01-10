@@ -447,7 +447,7 @@ echo '<form action="index.php?git=paddadmin" method="post">
     </div>
       <div class="user-box">
     <b>Admin Password</b><br>
-      <input type="password" name="adminpwd" placeholder="Admin Password" required="">
+      <input type="number" name="adminpwd" placeholder="Admin Password" required="">
     </div>
       <div class="user-box">
     <b>Admin Token</b><br>
@@ -501,7 +501,7 @@ echo '<form action="index.php?git=peditadmin&id='.intval($_GET['id']).'" method=
     </div>
       <div class="user-box">
     <b>Admin Password</b><br>
-      <input type="password" name="adminpwd" placeholder="Admin Password" required="">
+      <input type="number" name="adminpwd" placeholder="Admin Password" required="">
     </div>
       <div class="user-box">
     <b>Admin Token</b><br>
@@ -539,7 +539,7 @@ $getir->logincheck($_SESSION['admin_adi']);
 if(intval($_GET['id']) == 1) {
   die("Could not delete");
 } else {
-  
+
 }
 $stmt = $db->prepare('DELETE FROM admin_list WHERE admin_id = :postID') ;
 $stmt->execute(array(':postID' => intval($_GET['id'])));
