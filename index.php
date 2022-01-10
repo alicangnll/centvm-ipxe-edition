@@ -398,6 +398,163 @@ echo '<form action="index.php?git=ppxegen" method="post">
 </form></div></main></div>';
 break;
 
+case 'admin':
+$getir->logincheck($_SESSION['admin_adi']);
+echo '<div class="container">';
+$getir->NavBar();
+echo '<main class="main">
+<div class="login-box">
+<h1>Admin</h1>';
+$getir->HeadMenu("PXE Panel");
+echo '<table class="products-table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Admin</th>
+      <th>Action</th>
+    </tr>
+  </thead><tbody>';
+  $stmt = $db->prepare('SELECT * FROM admin_list ORDER BY admin_id');
+  $stmt->execute();
+  while($row = $stmt->fetch()) {
+ echo '<tr>
+      <td data-label="#">'.intval($row["admin_id"]).'</td>
+      <td data-label="Admin">'.strip_tags($row["admin_usrname"]).'</td>
+      <td data-label="Action"><a href="index.php?git=editadmin&id='.intval($row["admin_id"]).'">Edit</a> | <a href="index.php?git=deladmin&id='.intval($row["admin_id"]).'">Delete</a></td>
+    </tr>';
+  }
+echo '</tbody></table>
+<br><a class="btn btn-primary" href="index.php?git=addadmin">Add Admin</a>
+</div></main>';
+break;
+
+case 'addadmin':
+$getir->logincheck($_SESSION['admin_adi']);
+echo '<div class="container">';
+$getir->NavBar();
+echo '<main class="main">
+<div class="login-box">
+<h1>Add Admin</h1>';
+$getir->HeadMenu("PXE Panel");
+echo '<form action="index.php?git=paddadmin" method="post">
+    <div class="user-box">
+  <b>Admin E-Mail</b><br>
+      <input type="email" name="adminemail" placeholder="Admin E-Mail" value="'.strip_tags($row["admin_email"]).'" required="">
+    </div>
+    <div class="user-box">
+  <b>Admin Username</b><br>
+      <input type="text" name="adminusr" placeholder="Admin Username" value="'.strip_tags($row["admin_usrname"]).'" required="">
+    </div>
+      <div class="user-box">
+    <b>Admin Password</b><br>
+      <input type="password" name="adminpwd" placeholder="Admin Password" required="">
+    </div>
+      <div class="user-box">
+    <b>Admin Token</b><br>
+      <input type="password" name="admintkn" placeholder="Admin Token" required="">
+    </div>
+    <button type="submit" href="#">Submit</button>
+  </form>';
+break;
+
+case 'paddadmin':
+$getir->logincheck($_SESSION['admin_adi']);
+$update = $db->prepare("INSERT INTO admin_list(admin_email, admin_usrname, admin_passwd, admin_token, admin_yetki) VALUES (:email, :usr, :pwd, :tkn, :perm) ");
+$update->bindValue(':email', strip_tags($_POST["adminemail"]));
+$update->bindValue(':usr', strip_tags($_POST["adminusr"]));
+$update->bindValue(':pwd', sha1(md5($_POST["adminpwd"])));
+$update->bindValue(':tkn', sha1(md5($_POST["admintkn"])));
+$update->bindValue(':perm', "1");
+$update->execute();
+if($update){
+  echo "<script LANGUAGE='JavaScript'>
+  window.alert('Updated');
+  window.location.href='index.php?git=admin';
+  </script>";
+} else {
+  echo "<script LANGUAGE='JavaScript'>
+  window.alert('Not Updated');
+  window.location.href='index.php?git=admin';
+  </script>";
+}
+break;
+
+case 'editadmin':
+$getir->logincheck($_SESSION['admin_adi']);
+echo '<div class="container">';
+$getir->NavBar();
+echo '<main class="main">
+<div class="login-box">
+<h1>Edit Admin</h1>';
+$getir->HeadMenu("PXE Panel");
+$stmt = $db->prepare('SELECT * FROM admin_list WHERE admin_id = :postID');
+$stmt->execute(array(':postID' => intval($_GET['id'])));
+if($row = $stmt->fetch()) {
+echo '<form action="index.php?git=peditadmin&id='.intval($_GET['id']).'" method="post">
+    <div class="user-box">
+  <b>Admin E-Mail</b><br>
+      <input type="email" name="adminemail" placeholder="Admin E-Mail" value="'.strip_tags($row["admin_email"]).'" required="">
+    </div>
+    <div class="user-box">
+  <b>Admin Username</b><br>
+      <input type="text" name="adminusr" placeholder="Admin Username" value="'.strip_tags($row["admin_usrname"]).'" required="">
+    </div>
+      <div class="user-box">
+    <b>Admin Password</b><br>
+      <input type="password" name="adminpwd" placeholder="Admin Password" required="">
+    </div>
+      <div class="user-box">
+    <b>Admin Token</b><br>
+      <input type="password" name="admintkn" placeholder="Admin Token" required="">
+    </div>
+    <button type="submit" href="#">Submit</button>
+  </form>';
+}
+break;
+
+case 'peditadmin':
+$getir->logincheck($_SESSION['admin_adi']);
+$update = $db->prepare("UPDATE admin_list SET admin_email = :email, admin_usrname = :usr, admin_passwd = :pwd, admin_token = :tkn WHERE admin_id = :gonderid");
+$update->bindValue(':gonderid', intval($_GET["id"]));
+$update->bindValue(':email', strip_tags($_POST["adminemail"]));
+$update->bindValue(':usr', strip_tags($_POST["adminusr"]));
+$update->bindValue(':pwd', sha1(md5($_POST["adminpwd"])));
+$update->bindValue(':tkn', sha1(md5($_POST["admintkn"])));
+$update->execute();
+if($update){
+  echo "<script LANGUAGE='JavaScript'>
+  window.alert('Updated');
+  window.location.href='index.php?git=admin';
+  </script>";
+} else {
+  echo "<script LANGUAGE='JavaScript'>
+  window.alert('Not Updated');
+  window.location.href='index.php?git=admin';
+  </script>";
+}
+break;
+
+case 'deladmin':
+$getir->logincheck($_SESSION['admin_adi']);
+if(intval($_GET['id']) == 1) {
+  die("Could not delete");
+} else {
+
+}
+$stmt = $db->prepare('DELETE FROM admin_list WHERE admin_id = :postID') ;
+$stmt->execute(array(':postID' => intval($_GET['id'])));
+if($stmt){
+echo '<script>
+alert("Admin Deleted");
+window.location.replace("index.php?git=admin")
+</script>';
+} else {
+echo '<script>
+alert("Admin Could Not Deleted");
+window.location.replace("index.php?git=admin")</script>';
+}
+break;
+
 case 'ppxegen':
 $getir->logincheck($_SESSION['admin_adi']);
 echo '<div class="container">';

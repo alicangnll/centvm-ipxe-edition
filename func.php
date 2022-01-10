@@ -100,9 +100,7 @@ echo '<nav class="menu">
 				<input type="radio" name="menu" id="edit">
 				<li>
 					<label for="edit" class="title"><i class="fa fa-edit"></i> Admin</label>
-					<a class="data" href="#">Add Admin</a>
-					<a class="data" href="#">Delete Admin</a>
-					<a class="data" href="#">Edit Admin</a>
+					<a class="data" href="index.php?git=admin">Admins</a>
 					<a class="data" href="index.php?git=pxecikis">Exit</a>
 				</li>
 				<input type="radio" name="menu" id="tools">
