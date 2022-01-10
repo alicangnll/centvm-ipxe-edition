@@ -539,7 +539,7 @@ $getir->logincheck($_SESSION['admin_adi']);
 if(intval($_GET['id']) == 1) {
   die("Could not delete");
 } else {
-
+  
 }
 $stmt = $db->prepare('DELETE FROM admin_list WHERE admin_id = :postID') ;
 $stmt->execute(array(':postID' => intval($_GET['id'])));
